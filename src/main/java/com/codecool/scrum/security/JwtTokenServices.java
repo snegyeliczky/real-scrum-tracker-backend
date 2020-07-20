@@ -52,6 +52,7 @@ public class JwtTokenServices {
                 .compact();
     }
 
+    //changed to get token from cookie
     String getTokenFromRequest(HttpServletRequest req) {
         Cookie tokenCookie = WebUtils.getCookie(req, "token");
         if (tokenCookie == null) {

@@ -25,9 +25,9 @@ public class AuthController {
     }
 
     @PostMapping("/registration")
-    public void registration(@RequestBody UserCredentials newUser){
+    public ResponseEntity registration(@RequestBody UserCredentials newUser){
         newUser.setPassword(passwordEncoder.encode(newUser.getPassword()));
-        authService.registration(newUser);
+        return authService.registration(newUser);
     }
 
     @PostMapping("/signin")

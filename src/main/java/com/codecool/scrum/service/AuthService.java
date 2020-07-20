@@ -37,7 +37,7 @@ public class AuthService {
     @Autowired
     private AppUserRepository appUserRepository;
 
-    public void registration(UserCredentials newUser) {
+    public ResponseEntity registration(UserCredentials newUser) {
         AppUser appUser = AppUser.builder()
                 .username(newUser.getUsername())
                 .password(newUser.getPassword())
@@ -45,6 +45,7 @@ public class AuthService {
                 .roles(Arrays.asList("ADMIN"))
                 .build();
         appUserRepository.saveAndFlush(appUser);
+        return ResponseEntity.ok("registerd");
     }
 
 
@@ -77,5 +78,16 @@ public class AuthService {
         } catch (AuthenticationException e){
             throw new BadCredentialsException("Invalid username/password");
         }
+    }
+
+    public ResponseEntity logout(HttpServletResponse response) {
+
+        Cookie cookie = new Cookie("token", "logout");
+        cookie.setMaxAge(0);
+        cookie.setHttpOnly(true);
+        cookie.setPath("/");
+
+        response.addCookie(cookie);
+        return ResponseEntity.ok(cookie.getMaxAge());
     }
 }
