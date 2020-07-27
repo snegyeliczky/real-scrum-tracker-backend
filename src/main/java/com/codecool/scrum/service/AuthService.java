@@ -38,14 +38,19 @@ public class AuthService {
     private AppUserRepository appUserRepository;
 
     public ResponseEntity registration(UserCredentials newUser) {
-        AppUser appUser = AppUser.builder()
-                .username(newUser.getUsername())
-                .password(newUser.getPassword())
-                .email(newUser.getEmail())
-                .roles(Arrays.asList("ADMIN"))
-                .build();
-        appUserRepository.saveAndFlush(appUser);
-        return ResponseEntity.ok("registerd");
+        try {
+            AppUser appUser = AppUser.builder()
+                    .username(newUser.getUsername())
+                    .password(newUser.getPassword())
+                    .email(newUser.getEmail())
+                    .roles(Arrays.asList("ADMIN"))
+                    .build();
+            appUserRepository.saveAndFlush(appUser);
+            return ResponseEntity.ok(true);
+        } catch (Exception e){
+            return ResponseEntity.ok(false);
+        }
+
     }
 
 
@@ -73,7 +78,7 @@ public class AuthService {
             model.put("roles", roles);
             model.put("token", token);
              */
-            return ResponseEntity.ok(user);
+            return ResponseEntity.ok(appUserRepository.findByUsername(username));
 
         } catch (AuthenticationException e){
             throw new BadCredentialsException("Invalid username/password");
